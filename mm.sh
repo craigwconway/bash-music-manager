@@ -5,14 +5,31 @@ ext=mp3
 
 setExt()
 {
- echo setExt
- read pause
+ if [ $1 ] # make sure there is a value
+ then
+ ext=$1
+ fi
 }
 
 addMusic()
 {
- echo addMusic
+ echo "Enter a directory to search:"
+ read dir
+ if [ ! -d $dir ] 
+ then
+ echo "$dir is not a valid directory! Press ENTER to try again."
  read pause
+ addMusic
+ else
+ files=`find $dir -name *.$ext`
+ for file in $files
+ do
+  arr[$i]=$file 
+  i=`echo "$i + 1"|bc`
+ done
+ echo "Added ${#arr[*]} music files. Press ENTER to continue..."
+ read pause
+ fi
 }
 
 showStats()
@@ -27,6 +44,7 @@ export()
  read pause
 }
 
+
 while getopts e: opt
 do
  case $opt in
@@ -39,7 +57,7 @@ menu()
  cat << EOF
  Music Manager Main Menu
   a) Add Music 
-  e) Change Extension 
+  e) Change Extension (Current: $ext)
   s) Show Library Statistics
   x) Export Library
   q) Quit
