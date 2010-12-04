@@ -13,9 +13,15 @@ setExt()
 
 addMusic()
 {
+ counter=0 # local counter
+ if [ $1 ]
+ then
+ dir=$1
+ else
  echo "Enter a directory to search:"
  read dir
- if [ ! -d $dir ] 
+ fi
+ if [ ! -d $dir ] # validate directory
  then
  echo "$dir is not a valid directory! Press ENTER to try again."
  read pause
@@ -24,10 +30,11 @@ addMusic()
  files=`find $dir -name *.$ext`
  for file in $files
  do
-  arr[$i]=$file 
+  arr[$i]=$file # add file to array
   i=`echo "$i + 1"|bc`
+  counter=`echo "$counter + 1"|bc`
  done
- echo "Added ${#arr[*]} music files. Press ENTER to continue..."
+ echo "Added $counter music files. Press ENTER to continue..."
  read pause
  fi
 }
@@ -44,10 +51,10 @@ export()
  read pause
 }
 
-
-while getopts e: opt
+while getopts a:e: opt
 do
  case $opt in
+ a) addMusic $OPTARG;;
  e) setExt $OPTARG;;
  esac
 done
@@ -56,7 +63,7 @@ menu()
 {
  cat << EOF
  Music Manager Main Menu
-  a) Add Music 
+  a) Add Music (Current: ${#arr[*]} files)
   e) Change Extension (Current: $ext)
   s) Show Library Statistics
   x) Export Library
@@ -64,6 +71,7 @@ menu()
 EOF
 }
 
+# main program loop
 while :
 do
  clear
