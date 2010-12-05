@@ -27,6 +27,7 @@ addMusic()
  read pause
  addMusic
  else
+ # add music to array
  files=`find $dir -name *.$ext`
  for file in $files
  do
@@ -41,13 +42,22 @@ addMusic()
 
 showStats()
 {
- echo showStats
+ size=0
+ for a in ${arr[*]} # loop and grab file size
+ do
+ s=`ls -l $a|awk '{print $5}'`
+ size=`echo "$size + $s"|bc`
+ done
+ echo "There are ${#arr[*]} files using `echo "$size / 1000000"|bc` MB in your music collection."
+ echo "Press ENTER to continue..."
  read pause
 }
 
 export()
 {
- echo export
+ echo "$USER's Music Library (`date`)" > music.lib
+ ./doExport ${#arr[*]} ${arr[*]} | sort >> music.lib
+ echo "Music Library exported to `pwd`/music.lib. Press ENTER to continue..."
  read pause
 }
 
