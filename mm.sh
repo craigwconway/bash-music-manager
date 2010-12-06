@@ -2,6 +2,7 @@
 
 i=0
 ext=mp3
+exportFile=library.txt
 
 setExt()
 {
@@ -55,9 +56,21 @@ showStats()
 
 export()
 {
- echo "$USER's Music Library (`date`)" > music.lib
- ./doExport ${#arr[*]} ${arr[*]} | sort >> music.lib
- echo "Music Library exported to `pwd`/music.lib. Press ENTER to continue..."
+ echo "$USER's Music Library (`date`)" > $exportFile
+ ./doExport ${#arr[*]} ${arr[*]} | sort >> $exportFile
+ echo "Music Library exported to `pwd`/$exportFile. Press ENTER to continue..."
+ read pause
+}
+
+view()
+{
+ if [ ! -f $exportFile ]
+ then
+ echo "No Library Found. Has the library been exported?"
+ else
+ more $exportFile
+ fi
+ echo "Press ENTER to continue..."
  read pause
 }
 
@@ -77,11 +90,11 @@ menu()
   e) Change Extension (Current: $ext)
   s) Show Library Statistics
   x) Export Library
+  v) View Library
   q) Quit
 EOF
 }
 
-# main program loop
 while :
 do
  clear
@@ -94,6 +107,7 @@ do
     setExt $extension;;
  s) showStats;;
  x) export;;
+ v) view;;
  q) exit 0;;
  *) echo "Invalid Choise. Pless Enter to continue..."
     read invalid;;
