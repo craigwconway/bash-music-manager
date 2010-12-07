@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# music array counter
 i=0
+
+# the default extension for music files
 ext=mp3
+
+# file name for export
 exportFile=library.txt
 
+# change the music file extension
 setExt()
 {
  if [ $1 ] # make sure there is a value
@@ -12,6 +18,7 @@ setExt()
  fi
 }
 
+# add music
 addMusic()
 {
  counter=0 # local counter
@@ -41,6 +48,7 @@ addMusic()
  fi
 }
 
+# show statictics
 showStats()
 {
  size=0
@@ -54,6 +62,7 @@ showStats()
  read pause
 }
 
+# export library
 export()
 {
  echo "$USER's Music Library (`date`)" > $exportFile
@@ -62,6 +71,7 @@ export()
  read pause
 }
 
+# view library
 view()
 {
  if [ ! -f $exportFile ]
@@ -74,6 +84,7 @@ view()
  read pause
 }
 
+# check for option
 while getopts a:e: opt
 do
  case $opt in
@@ -82,6 +93,7 @@ do
  esac
 done
 
+# display the main menu
 menu()
 {
  cat << EOF
@@ -95,6 +107,7 @@ menu()
 EOF
 }
 
+# main program loop
 while :
 do
  clear
